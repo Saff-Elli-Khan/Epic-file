@@ -36,38 +36,6 @@ const file = new EpicFile();
 
 ```
 
-Server Configuration
-
-```
-//Server Configuration
-file.server_config({
-  url: "http://localhost/",
-
-  //Upload (Process) File Headers & Post Data
-  process: {
-    endpoint: "index.php",
-    headers: {
-      "x-token": "testingtoken123"
-    },
-    post: {
-      token: "x-token-here"
-    }
-  },
-
-  //Delete (Revert) File Headers & Post Data
-  revert: {
-    endpoint: "index.php",
-    headers: {
-      "x-token": "testingtoken123"
-    },
-    post: {
-      token: "x-token-here"
-    }
-  }
-});
-
-```
-
 Create Object
 
 ```
@@ -133,6 +101,38 @@ file.create("#epic-file", {
     },
     revert: (serverResponse, blockId, fileReference) => {
       console.log("File Revert Error!");
+    }
+  }
+});
+
+```
+
+Server Configuration
+
+```
+//Server Configuration
+file.server_config({
+  url: "http://localhost/",
+
+  //Upload (Process) File Headers & Post Data
+  process: {
+    endpoint: "index.php",
+    headers: {
+      "x-token": "testingtoken123"
+    },
+    post: {
+      token: "x-token-here"
+    }
+  },
+
+  //Delete (Revert) File Headers & Post Data
+  revert: {
+    endpoint: "index.php",
+    headers: {
+      "x-token": "testingtoken123"
+    },
+    post: {
+      token: "x-token-here"
     }
   }
 });
