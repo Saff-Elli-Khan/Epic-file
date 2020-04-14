@@ -27,7 +27,12 @@
             Best <strong>Filepond alternative</strong> file uploading library.
           </p>
           <center class="px-5 d-block">
-            <input type="file" style="display: none;" name="file" />
+            <input
+              type="file"
+              id="epic-file"
+              style="display: none;"
+              name="file"
+            />
           </center>
         </div>
       </div>
@@ -41,11 +46,11 @@
 
       //Server Configuration
       file.server_config({
-        url: "http://localhost/epic-file/",
+        url: "http://localhost/",
 
         //Upload (Process) File Headers & Post Data
         process: {
-          endpoint: "file.php",
+          endpoint: "index.php",
           headers: {
             "x-token": "testingtoken123"
           },
@@ -56,7 +61,7 @@
 
         //Delete (Revert) File Headers & Post Data
         revert: {
-          endpoint: "file.php",
+          endpoint: "index.php",
           headers: {
             "x-token": "testingtoken123"
           },
@@ -67,7 +72,7 @@
       });
 
       //Epic File Configuration
-      file.create('[name="file"]', {
+      file.create("#epic-file", {
         theme_profile: false, //For single circular image file
         multiple: true, //Accept Multiple Files
         limit: 1, //Upload Files Limit
@@ -84,49 +89,49 @@
         preview: false, //Image Preview
 
         //Events Callbacks
-        adding: () => {
+        adding: (selectedFilesObject, browserNode) => {
           console.log("Adding File(s).");
         },
-        added: () => {
+        added: (blockId, fileObject) => {
           console.log("File Has Been Added.");
         },
-        removing: () => {
+        removing: blockId => {
           console.log("Removing File.");
         },
-        removed: () => {
+        removed: blockId => {
           console.log("File Has Been Removed!");
         },
-        processing: () => {
+        processing: (blockId, fileObject) => {
           console.log("Uploading File.");
         },
-        processed: () => {
+        processed: (serverResponse, blockId, fileObject) => {
           console.log("File Has Been Uploaded");
         },
-        reverting: () => {
+        reverting: blockId => {
           console.log("Reverting File.");
         },
-        reverted: () => {
+        reverted: (serverResponse, blockId, fileReference) => {
           console.log("File Has Been Reverted!");
         },
-        loading: () => {
+        loading: filesList => {
           console.log("Loading File(s).");
         },
-        loaded: () => {
+        loaded: (blockId, loadObject, fileObject) => {
           console.log("File Has Been Loaded.");
         },
-        aborted: () => {
+        aborted: (blockId, fileObject) => {
           console.log("Process Has Been Aborted.");
         },
 
         //Manage Errors
         error: {
-          add: () => {
+          add: (errorMessage, fileObject, browserNode) => {
             console.log("Unable To Add File!");
           },
-          process: () => {
+          process: (serverResponse, blockId, fileObject) => {
             console.log("Upload Error!");
           },
-          revert: () => {
+          revert: (serverResponse, blockId, fileReference) => {
             console.log("File Revert Error!");
           }
         }
