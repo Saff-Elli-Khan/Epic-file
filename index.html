@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link rel="shortcut icon" href="./assets/img/logo.png" type="image/png" />
+
+    <link rel="stylesheet" href="assets/css/vendor/bootstrap.min.css" />
+    <link rel="stylesheet" href="assets/css/local/epic-file.css" />
+
+    <title>Epic File</title>
+  </head>
+
+  <body>
+    <div class="container mt-5">
+      <div class="row">
+        <div class="col-md-6 mx-auto text-center">
+          <img
+            class="mt-3"
+            src="./assets/img/logo.png"
+            width="60px"
+            alt="Epic-Logo"
+          />
+          <h1 class="mt-3">Epic File</h1>
+          <p class="mb-5">
+            Best <strong>Filepond alternative</strong> file uploading library.
+          </p>
+          <center class="px-5 d-block">
+            <input type="file" style="display: none;" name="file" />
+          </center>
+        </div>
+      </div>
+    </div>
+
+    <script src="assets/js/vendor/jquery.min.js"></script>
+    <script src="assets/js/local/epic-file.js"></script>
+    <script>
+      //Instantiate Epic File Class
+      const file = new EpicFile();
+
+      //Server Configuration
+      file.server_config({
+        url: "http://localhost/epic-file/",
+
+        //Upload (Process) File Headers & Post Data
+        process: {
+          endpoint: "file.php",
+          headers: {
+            "x-token": "testingtoken123"
+          },
+          post: {
+            token: "x-token-here"
+          }
+        },
+
+        //Delete (Revert) File Headers & Post Data
+        revert: {
+          endpoint: "file.php",
+          headers: {
+            "x-token": "testingtoken123"
+          },
+          post: {
+            token: "x-token-here"
+          }
+        }
+      });
+
+      //Epic File Configuration
+      file.create('[name="file"]', {
+        theme_profile: false, //For single circular image file
+        multiple: true, //Accept Multiple Files
+        limit: 1, //Upload Files Limit
+        max_size: 10, //Max File Size
+        instant_upload: true, //Set True To Upload Instantly
+        //Allowed File Mimes
+        accept: [
+          "image/png",
+          "image/jpg",
+          "image/jpeg",
+          "text/plain",
+          "image/gif"
+        ],
+        preview: false, //Image Preview
+
+        //Events Callbacks
+        adding: () => {
+          console.log("Adding File(s).");
+        },
+        added: () => {
+          console.log("File Has Been Added.");
+        },
+        removing: () => {
+          console.log("Removing File.");
+        },
+        removed: () => {
+          console.log("File Has Been Removed!");
+        },
+        processing: () => {
+          console.log("Uploading File.");
+        },
+        processed: () => {
+          console.log("File Has Been Uploaded");
+        },
+        reverting: () => {
+          console.log("Reverting File.");
+        },
+        reverted: () => {
+          console.log("File Has Been Reverted!");
+        },
+        loading: () => {
+          console.log("Loading File(s).");
+        },
+        loaded: () => {
+          console.log("File Has Been Loaded.");
+        },
+        aborted: () => {
+          console.log("Process Has Been Aborted.");
+        },
+
+        //Manage Errors
+        error: {
+          add: () => {
+            console.log("Unable To Add File!");
+          },
+          process: () => {
+            console.log("Upload Error!");
+          },
+          revert: () => {
+            console.log("File Revert Error!");
+          }
+        }
+      });
+
+      //Already Loaded Files
+      file.load([
+        //First File
+        {
+          name: "Something",
+          size: 1000,
+          src: "./assets/img/logo.png"
+        }
+        // //Second File
+        // {
+        //   reference: 1001, //A Unique File ID From Server (Used To Delete File From Server)
+        //   name: "Something",
+        //   size: 1000,
+        //   src: "fileSource.jpg"
+        // }
+        // //And So on...
+      ]);
+    </script>
+  </body>
+</html>
