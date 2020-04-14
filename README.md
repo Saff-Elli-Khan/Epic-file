@@ -13,7 +13,7 @@ A Filepond alternative javascript library
 - Image File Preview
 - Profile Theme Interface
 - Fast Upload Multiple Files
-- Revert File
+- Revert Files
 
 ### Usage
 
