@@ -111,49 +111,49 @@
       });
 
       //Server Configuration
-      // file.server_config({
-      //   url: "http://localhost/",
+      file.server_config({
+        url: "http://localhost/",
 
-      //   //Upload (Process) File Headers & Post Data
-      //   process: {
-      //     endpoint: "index.php",
-      //     headers: {
-      //       "x-token": "testingtoken123"
-      //     },
-      //     post: {
-      //       token: "x-token-here"
-      //     }
-      //   },
+        //Upload (Process) File Headers & Post Data
+        process: {
+          endpoint: "index.php",
+          headers: {
+            "x-token": "testingtoken123"
+          },
+          post: {
+            token: "x-token-here"
+          }
+        },
 
-      //   //Delete (Revert) File Headers & Post Data
-      //   revert: {
-      //     endpoint: "index.php",
-      //     headers: {
-      //       "x-token": "testingtoken123"
-      //     },
-      //     post: {
-      //       token: "x-token-here"
-      //     }
-      //   }
-      // });
+        //Delete (Revert) File Headers & Post Data
+        revert: {
+          endpoint: "index.php",
+          headers: {
+            "x-token": "testingtoken123"
+          },
+          post: {
+            token: "x-token-here"
+          }
+        }
+      });
 
       //Already Loaded Files
-      // file.load([
-      //   //First File
-      //   {
-      //     name: "Something",
-      //     size: 1000,
-      //     src: "./assets/img/logo.png"
-      //   }
-      //   // //Second File
-      //   // {
-      //   //   reference: 1001, //A Unique File ID From Server (Used To Delete File From Server)
-      //   //   name: "Something",
-      //   //   size: 1000,
-      //   //   src: "fileSource.jpg"
-      //   // }
-      //   // //And So on...
-      // ]);
+      file.load([
+        //First File
+        {
+          name: "Something",
+          size: 1000,
+          src: "./assets/img/logo.png"
+        }
+        // //Second File
+        // {
+        //   reference: 1001, //A Unique File ID From Server (Used To Delete File From Server)
+        //   name: "Something",
+        //   size: 1000,
+        //   src: "fileSource.jpg"
+        // }
+        // //And So on...
+      ]);
     </script>
   </body>
 </html>
