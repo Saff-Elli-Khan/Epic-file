@@ -19,19 +19,26 @@ A Filepond alternative javascript library
 
 Its a very easy to use library!
 
-HTML
+###### HTML
 
 ```
 <input type="file" id="epic-file" style="display: none;" name="file" />
 
 ```
 
-Javascript
+###### Javascript
+
+Instantiate
 
 ```
 //Instantiate Epic File Class
 const file = new EpicFile();
 
+```
+
+Server Configuration
+
+```
 //Server Configuration
 file.server_config({
   url: "http://localhost/",
@@ -59,6 +66,11 @@ file.server_config({
   }
 });
 
+```
+
+Create Object
+
+```
 //Epic File Configuration
 file.create("#epic-file", {
   theme_profile: false, //For single circular image file
@@ -124,6 +136,12 @@ file.create("#epic-file", {
     }
   }
 });
+
+```
+
+Load Files Programmatically
+
+```
 
 //Already Loaded Files
 file.load([
