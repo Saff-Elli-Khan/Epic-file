@@ -614,21 +614,17 @@ class EpicFile {
       },
       success: data => {
         //Post Success
-        if (self.options.processed !== null) {
-          if (typeof self.options.processed === "function")
-            self.options.processed(data, id, file);
-        }
         $("#" + id + " .--ec-text-action").text("Revert");
         $("#" + id + " .--ec-file-abort").addClass("--ec-control-hidden");
         $("#" + id + " .--ec-file-revert").removeClass("--ec-control-hidden");
         $("#" + id).addClass("--ec-block-success");
+        if (self.options.processed !== null) {
+          if (typeof self.options.processed === "function")
+            self.options.processed(data, id, file);
+        }
       },
       error: data => {
         //Post Error
-        if (self.options.error !== null) {
-          if (typeof self.options.error.process === "function")
-            self.options.error.process(data, id, file);
-        }
         self.warn("Unable To Upload File(s)!", true);
         $("#" + id).addClass("--ec-block-warning");
         $("#" + id + " .--ec-text-status").text("Error Occured!");
@@ -637,18 +633,22 @@ class EpicFile {
         $("#" + id + " .--ec-file-abort").addClass("--ec-control-hidden");
         $("#" + id + " .--ec-file-revert").addClass("--ec-control-hidden");
         $("#" + id + " .--ec-file-process").removeClass("--ec-control-hidden");
+        if (self.options.error !== null) {
+          if (typeof self.options.error.process === "function")
+            self.options.error.process(data, id, file);
+        }
       }
     });
     $("#" + id + " .--ec-file-abort").on("click", () => {
       process.abort();
-      if (typeof self.options.aborted === "function")
-        self.options.aborted(id, file);
       $("#" + id + " .--ec-file-abort").addClass("--ec-control-hidden");
       $("#" + id + " .--ec-file-remove").removeClass("--ec-control-hidden");
       $("#" + id + " .--ec-file-process").removeClass("--ec-control-hidden");
       $("#" + id + " .--ec-text-status").text("Cancelled");
       $("#" + id + " .--ec-text-action").text("Process Again");
       $("#" + id + " .--ec-file-abort").unbind("click");
+      if (typeof self.options.aborted === "function")
+        self.options.aborted(id, file);
     });
   }
   //Revert File
