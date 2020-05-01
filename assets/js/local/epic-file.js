@@ -573,16 +573,8 @@ class EpicFile {
     $("#" + id + " .--ec-file-abort").removeClass("--ec-control-hidden");
     if (e.lengthComputable) {
       var percentage = (e.loaded / e.total) * 100;
-      if (percentage < 100) {
-        text = "Uploading " + Math.round(percentage) + "%";
-        $("#" + id + " .--ec-text-status").text(text);
-      } else {
-        text = "Uploaded " + Math.round(percentage) + "%";
-        $("#" + id + " .--ec-text-status").text(text);
-        $("#" + id + " .--ec-text-action").text("Revert");
-        $("#" + id + " .--ec-file-abort").addClass("--ec-control-hidden");
-        $("#" + id + " .--ec-file-revert").removeClass("--ec-control-hidden");
-      }
+      text = "Uploading " + Math.round(percentage) + "%";
+      $("#" + id + " .--ec-text-status").text(text);
     } else {
       $("#" + id + " .--ec-text-status").text(text);
     }
@@ -626,6 +618,10 @@ class EpicFile {
           if (typeof self.options.processed === "function")
             self.options.processed(data, id, file);
         }
+        $("#" + id + " .--ec-text-status").text(text);
+        $("#" + id + " .--ec-text-action").text("Revert");
+        $("#" + id + " .--ec-file-abort").addClass("--ec-control-hidden");
+        $("#" + id + " .--ec-file-revert").removeClass("--ec-control-hidden");
         $("#" + id).addClass("--ec-block-success");
       },
       error: data => {
