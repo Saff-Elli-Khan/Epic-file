@@ -618,7 +618,6 @@ class EpicFile {
           if (typeof self.options.processed === "function")
             self.options.processed(data, id, file);
         }
-        $("#" + id + " .--ec-text-status").text(text);
         $("#" + id + " .--ec-text-action").text("Revert");
         $("#" + id + " .--ec-file-abort").addClass("--ec-control-hidden");
         $("#" + id + " .--ec-file-revert").removeClass("--ec-control-hidden");
