@@ -51,11 +51,14 @@ class EpicFile {
   server = {
     url: "/",
     process: {
+      method: "POST",
       endpoint: "",
       post: {},
       headers: {}
     },
     revert: {
+      method: "DELETE",
+      "reference-key": "id",
       endpoint: "",
       post: {},
       headers: {}
@@ -94,7 +97,30 @@ class EpicFile {
     //Set Options
     this.set_options(options);
     //Initilize UI
-    this.init(name, this.options.text);
+    if (this.init(name, this.options.text)) {
+      // Preloaded Data
+      if (
+        this.input.node.attr("load-file-name") &&
+        this.input.node.attr("load-file-size") &&
+        this.input.node.attr("load-file-src")
+      ) {
+        this.load([
+          {
+            reference: this.input.node.attr("load-file-reference"),
+            name: this.input.node.attr("load-file-name"),
+            size: this.input.node.attr("load-file-size"),
+            src: this.input.node.attr("load-file-src"),
+          }
+        ]);
+      }
+      // Server Configuration
+      if (this.input.node.attr("server-url")) this.server_config({ url: this.input.node.attr("server-url") });
+      if (this.input.node.attr("server-process-endpoint")) this.server_config({ process: { endpoint: this.input.node.attr("server-process-endpoint") } });
+      if (this.input.node.attr("server-process-method")) this.server_config({ process: { method: this.input.node.attr("server-process-method") } });
+      if (this.input.node.attr("server-revert-endpoint")) this.server_config({ revert: { endpoint: this.input.node.attr("server-revert-endpoint") } });
+      if (this.input.node.attr("server-revert-method")) this.server_config({ revert: { method: this.input.node.attr("server-revert-method") } });
+      if (this.input.node.attr("server-revert-reference-key")) this.server_config({ revert: { "reference-key": this.input.node.attr("server-revert-reference-key") } });
+    }
     return true;
   }
   //Initialize the UI
@@ -214,7 +240,7 @@ class EpicFile {
           }
           self.warn(
             self.options.limit +
-              " File(s) Allowed! <span class='--ec-file-action'>Browse Again</span>"
+            " File(s) Allowed! <span class='--ec-file-action'>Browse Again</span>"
           );
           throw self.options.limit + " File(s) Allowed!";
         } else {
@@ -227,16 +253,16 @@ class EpicFile {
                 if (typeof self.options.error.adding == "function")
                   self.options.error.add(
                     "Minimum File Size Allowed Is " +
-                      self.options.max_size +
-                      " MB",
+                    self.options.max_size +
+                    " MB",
                     self.files,
                     browser
                   );
               }
               self.warn(
                 "Minimum File Size Allowed Is " +
-                  self.options.max_size +
-                  " MB <span class='--ec-file-action'>Browse Again</span>"
+                self.options.max_size +
+                " MB <span class='--ec-file-action'>Browse Again</span>"
               );
               throw (
                 "Minimum File Size Allowed Is " + self.options.max_size + " MB"
@@ -259,7 +285,7 @@ class EpicFile {
                   }
                   self.warn(
                     self.options.limit +
-                      " File(s) Allowed! <span class='--ec-file-action'>Browse Again</span>"
+                    " File(s) Allowed! <span class='--ec-file-action'>Browse Again</span>"
                   );
                   throw self.options.limit + " File(s) Allowed!";
                 } else {
@@ -336,15 +362,15 @@ class EpicFile {
                             </div>
                         </div>
                         <p class="--ec-file-block-text --ec-text-file-name --ec-text-light">${
-                          file.name
-                        }</p>
+      file.name
+      }</p>
                         <p class="--ec-file-block-text --ec-text-file-size --ec-text-sm --ec-text-semi-light">${this.size_calc(
-                          file.size
-                        )}</p>
+        file.size
+      )}</p>
                         <form onsubmit="return false;" class="--ec-file-form">
                             <input class="--ec-file" style="display:none;" name="${
-                              this.input.name
-                            }" type="file" />
+      this.input.name
+      }" type="file" />
                         </form>
                     </div>
                     <div class="--ec-file-col-6 --ec-file-text-right">
@@ -522,13 +548,13 @@ class EpicFile {
   //Create FileList
   create_files_list(a) {
     a = [].slice.call(Array.isArray(a) ? a : arguments);
-    for (var c, b = (c = a.length), d = !0; b-- && d; )
+    for (var c, b = (c = a.length), d = !0; b-- && d;)
       d = a[b] instanceof File;
     if (!d)
       throw new TypeError(
         "expected argument to FileList is File or array of File objects"
       );
-    for (b = new ClipboardEvent("").clipboardData || new DataTransfer(); c--; )
+    for (b = new ClipboardEvent("").clipboardData || new DataTransfer(); c--;)
       b.items.add(a[c]);
     return b.files;
   }
@@ -542,10 +568,16 @@ class EpicFile {
     if (typeof server.process !== "undefined") {
       if (typeof server.process.endpoint !== "undefined")
         this.server.process.endpoint = server.process.endpoint;
+      if (typeof server.process.method !== "undefined")
+        this.server.process.method = server.process.method;
     }
     if (typeof server.revert !== "undefined") {
       if (typeof server.revert.endpoint !== "undefined")
         this.server.revert.endpoint = server.revert.endpoint;
+      if (typeof server.revert.method !== "undefined")
+        this.server.revert.method = server.revert.method;
+      if (typeof server.revert["reference-key"] !== "undefined")
+        this.server.revert["reference-key"] = server.revert["reference-key"];
     }
     if (typeof server.process !== "undefined") {
       if (typeof server.process.headers !== "undefined")
@@ -590,7 +622,7 @@ class EpicFile {
       data.append(key, self.server.process.post[key]);
     }
     var process = $.ajax({
-      type: "POST",
+      type: self.server.process.method,
       url: self.server.url + self.server.process.endpoint,
       headers: self.server.process.headers,
       data: data,
@@ -661,9 +693,9 @@ class EpicFile {
     self.files_list.forEach((v, i) => {
       if (v.id == id) {
         if (v.reference !== null) {
-          data["id"] = v.reference;
+          data[self.server.revert["reference-key"]] = v.reference;
           $.ajax({
-            type: "POST",
+            type: self.server.revert.method,
             url: self.server.url + self.server.revert.endpoint,
             headers: self.server.revert.headers,
             data: data,
